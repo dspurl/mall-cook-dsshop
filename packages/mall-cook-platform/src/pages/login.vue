@@ -124,8 +124,8 @@ export default {
     return {
       active: "login",
       loginForm: {
-        account: '',
-        password: ''
+        account: 'pang12345',
+        password: 'abcd123456'
       },
       registerForm: {
         account: '', 
