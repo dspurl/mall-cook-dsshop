@@ -6,7 +6,8 @@
  * @LastEditTime: 2022-04-24 09:14:25
 -->
 <!-- [English](./README.md) | 简体中文  -->
-
+## 说明
+- 安装MongoDB的时候需要安装MongoDB Compass用来可视化管理
 <p align="center">
   <img src="./static/logo.jpg" />
 </p>
