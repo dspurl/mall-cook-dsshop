@@ -158,7 +158,7 @@ export default {
       .canvas-center-drag-set {
         position: absolute;
         top: 40px;
-        left: 450px;
+        left: 250px;
         width: 40px;
         height: 40px;
         border-radius: 50%;
