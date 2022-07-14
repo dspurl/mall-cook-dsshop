@@ -120,6 +120,8 @@ router.beforeEach((to, from, next) => {
   } else {
     if (!store.getters.token) {
       next('/')
+      // 不做验证处理
+      // next()
     } else {
       next()
     }

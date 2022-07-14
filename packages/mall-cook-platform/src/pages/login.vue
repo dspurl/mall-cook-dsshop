@@ -111,6 +111,7 @@
 
 <script>
 import { mapMutations } from "vuex";
+import { getProjectById } from "@/api/project";
 import { login, register } from "@/api/user";
 
 export default {
@@ -164,8 +165,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setToken", "setUserInfo", "logout"]),
-
+    // ...mapMutations(["setToken", "setUserInfo", "logout"]),
+    // 增加setProject，用于直接进入商城编辑页
+    ...mapMutations(["setToken", "setUserInfo", "logout", "setProject"]),
     // 登录
     async login() {
       this.$refs["login"].validate(async (valid) => {
@@ -180,7 +182,13 @@ export default {
             });
             this.setToken(res.token);
             this.setUserInfo(res.userInfo);
-            this.$router.push({ name: "managet" });
+            // this.$router.push({ name: "managet" });
+            // 直接跳转到用户的商城模板
+            const {data} = await getProjectById({
+              id: '62ce6264eb3a4050049aaf09'
+            });
+            this.setProject(data);
+            this.$router.push({ name: "mall" });
           } else {
             this.$notify({
               title: "登录失败",

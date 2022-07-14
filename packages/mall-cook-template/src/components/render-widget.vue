@@ -95,14 +95,25 @@
       :id="'widget' + item.id"
       :key="item.id"
     ></waiting-cmp>
+    <!-- 新增组件添加在这-->
+    <DsTitle
+        v-if="item.component == 'DsTitle'"
+        :id="'widget' + item.id"
+        :key="item.id"
+        :styles="item.styles"
+        :attrs="item.attrs"
+        :value="item.value"
+    ></DsTitle>
   </view>
 </template>
 
 <script>
 import WaitingCmp from "@/components/waiting-cmp";
+import DsTitle from "../widgets/DsTitle/DsTitle";
 
 export default {
   components: {
+    DsTitle,
     WaitingCmp,
   },
 

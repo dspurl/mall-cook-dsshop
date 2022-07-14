@@ -9,8 +9,8 @@
   <div>
     <div class="topBar">
       <!-- 左侧内容 -->
-      <span class="f14 pointer" @click="back">切换商城</span>
-
+<!--      <span class="f14 pointer" @click="back">切换商城</span>-->
+      <span class="f14 pointer">返回后台</span>
       <!-- 右侧内容 -->
       <div>
         <git-control />
@@ -20,11 +20,10 @@
 
         <el-button size="small ml10" @click="show = true">实时预览</el-button>
 
-        <el-button size="small f-white bg-theme" @click="openSave"
-          >保存</el-button
-        >
+        <el-button size="small f-white bg-theme" @click="openSave">保存</el-button>
         
-        <el-button size="small ml10" @click="onLogout">退出</el-button>
+<!--        <el-button size="small ml10" @click="onLogout">退出</el-button>-->
+        <el-button size="small ml10" @click="onLogout">返回</el-button>
       </div>
     </div>
 

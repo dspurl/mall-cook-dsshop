@@ -10,8 +10,9 @@
     <div>
       <template v-if="isComplete">
         <h3 class="mb20 f13 f-grey">
-          组件配置项schema，放在组件包下 schema.json
+          在widgets创建自定义组件，放在组件包下 component.json
           配置文件中，若不满足可手动修改
+          在render-widget.vue引入组件
         </h3>
         <json-viewer
           v-model="config"

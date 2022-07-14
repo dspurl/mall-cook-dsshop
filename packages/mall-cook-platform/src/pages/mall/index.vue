@@ -76,11 +76,11 @@ export default {
           icon: "icon-fuzhiyemian",
           path: "/mall/pages-manage",
         },
-        {
-          name: "商品",
-          icon: "icon-shangpin-meau",
-          path: "/mall/goods",
-        },
+        // {
+        //   name: "商品",
+        //   icon: "icon-shangpin-meau",
+        //   path: "/mall/goods",
+        // },
         {
           name: "构建",
           icon: "icon-list",

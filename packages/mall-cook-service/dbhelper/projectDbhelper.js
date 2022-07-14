@@ -75,8 +75,7 @@ const helper = {
         // 这里只会查userId 为 618d141848f2514904ebd07e的数据，如果想全部模板那么就不要这个条件
         // 如果你也想根据userId找，那么这里提供两个方案；1：接口把userId传过来； 2： 把userId放到jwt加密里面，使用接口时再通过jwt界面处理出userId,这样就可以根据登录用户来查
         const match = { 
-          type: { $eq: 'model' },
-          userId: { $eq: '618d141848f2514904ebd07e'}
+          type: { $eq: 'model' }
         } 
         if(industry) {
           match.industry =  { $eq:  industry }
