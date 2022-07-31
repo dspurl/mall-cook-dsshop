@@ -10,10 +10,10 @@
 
     <!-- 侧边菜单 -->
     <ul class="main-meau">
-      <img
+<!--      <img
         class="w40 auto-center mt10 mb30 radius"
         :src="project.logo"
-      >
+      >-->
       <template v-for="(item,index) in meauList">
         <router-link :to="{path: item.path}">
           <li class="main-meau-item">
@@ -81,7 +81,7 @@ export default {
         //   icon: "icon-shangpin-meau",
         //   path: "/mall/goods",
         // },
-        {
+        /*{
           name: "构建",
           icon: "icon-list",
           path: "/mall/page-build",
@@ -90,7 +90,7 @@ export default {
           name: "模板",
           icon: "icon-list",
           path: "/mall/model-manage",
-        },
+        },*/
       ],
     };
   },

@@ -10,7 +10,7 @@
     <div class="topBar">
       <!-- 左侧内容 -->
 <!--      <span class="f14 pointer" @click="back">切换商城</span>-->
-      <span class="f14 pointer">返回后台</span>
+      <span class="f14"></span>
       <!-- 右侧内容 -->
       <div>
         <git-control />
@@ -110,9 +110,8 @@ export default {
         richText: JSON.stringify(this.project),
       };
 
-      let { status } = await editProject(data);
-
-      if (status == "10000")
+      let { result } = await editProject(data);
+      if (result === 'ok')
         this.$notify({
           title: "成功",
           message: "项目保存成功",

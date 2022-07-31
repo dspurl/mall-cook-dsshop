@@ -1,4 +1,5 @@
 /*
+ * 需要删除
  * @Description: What's this for
  * @Autor: WangYuan
  * @Date: 2022-01-24 09:24:11
@@ -7,7 +8,6 @@
  */
 
 import request from '@/utils/request'
-
 /**
  * 查询项目详情
  */
@@ -33,7 +33,7 @@ export const getGoodsList = data => {
  * 根据ids查询商品列表
  */
 export const getGoodsListByIds = data => {
-  return request('/goods/getByIds', data)
+  return request('/good', data, 'GET')
 }
 
 
@@ -41,5 +41,5 @@ export const getGoodsListByIds = data => {
  * 封面上传
  */
  export const uploadCover = data => {
-  return request('/upload', data)
+  return request('/uploadPictures', data)
 }

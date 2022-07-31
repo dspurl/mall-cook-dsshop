@@ -11,7 +11,7 @@
       v-for="(item,key) in list"
       class="flex-center h45 w45 mr10 mb10 shadow"
     >
-      <img class="w-100 h-100" :src="item.cover" />
+      <img class="w-100 h-100" :src="item.resources.img | smallImage(80)" />
     </div>
     <div
       class="flex-center h45 w45 shadow pointer"
@@ -56,13 +56,13 @@ export default {
     async getList() {
       let data = {
         projectId: this.project.id,
-        ids: this.value,
+        ids: this.value.length ? this.value : ''
       };
 
-      let { status, list } = await getGoodsByIds(data);
+      let { result, message } = await getGoodsByIds(data);
 
-      if (status == "10000") {
-        this.list = list;
+      if (result === "ok") {
+        this.list = message.data;
       }
     },
 

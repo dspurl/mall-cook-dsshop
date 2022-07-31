@@ -2,8 +2,8 @@
  * @Description: What's this for
  * @Autor: WangYuan
  * @Date: 2022-01-19 15:22:12
- * @LastEditors: WangYuan
- * @LastEditTime: 2022-03-22 15:07:46
+ * @LastEditors: purl
+ * @LastEditTime: 2022-07-30 16:47:46
 -->
 <template>
   <ul class="tabbar" :style="fixSafeArea">
@@ -109,7 +109,7 @@ export default {
   }
 
   .tabbar-item-active {
-    color: cornflowerblue !important;
+    color: #fa436a !important;
   }
 }
 </style>

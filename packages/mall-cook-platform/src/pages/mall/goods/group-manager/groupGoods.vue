@@ -65,12 +65,14 @@ export default {
     async getList() {
       let data = {
         projectId: this.project.id,
-        ids: this.mValue,
+        ids: this.mValue
       };
 
-      let { status, list } = await getGoodsByIds(data);
+      let { result, message } = await getGoodsByIds(data);
 
-      if (status == "10000") this.list = list;
+      if (result === "ok") {
+        this.list = message.data;
+      }
     },
 
     submit(list) {

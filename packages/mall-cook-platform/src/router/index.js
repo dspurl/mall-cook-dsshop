@@ -8,7 +8,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
-
+import { MessageBox } from 'element-ui'
 Vue.use(VueRouter)
 
 const routes = [
@@ -115,17 +115,25 @@ const router = new VueRouter({
 
 // 全局路由守卫鉴权
 router.beforeEach((to, from, next) => {
-  if (to.name == 'login') {
+  // window.addEventListener("message", function (e) {
+  //   if (e.source != window.parent) return;
+  //   if (e.data) {
+  //     let { even, params } = e.data;
+  //     if (even == "init") {
+  //       store.commit('setToken', params.Authorization)
+  //     }
+  //   }
+  // });
+  /*if (to.name == 'login') {
     next()
   } else {
     if (!store.getters.token) {
       next('/')
-      // 不做验证处理
-      // next()
     } else {
       next()
     }
-  }
+  }*/
+  next()
 })
 
 export default router

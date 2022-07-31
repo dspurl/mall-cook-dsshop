@@ -6,15 +6,26 @@
  * @LastEditTime: 2022-03-22 14:45:04
 -->
 <template>
-  <tabbar-page :location="2"></tabbar-page>
+  <tabbar-page v-if="flag" :location="2"></tabbar-page>
 </template>
 
 <script>
 import tabbarPage from "@/components/tabbar-page";
 
 export default {
+  data(){
+	  return {
+		flag: false
+	  }
+  },
   components: {
     tabbarPage,
+  },
+  onShow() {
+  	  this.flag = true
+  },
+  onHide(){
+  	  this.flag = false
   },
 };
 </script>

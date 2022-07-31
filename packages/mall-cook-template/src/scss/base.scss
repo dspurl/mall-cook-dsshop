@@ -9,7 +9,9 @@ view {
 image {
     display: block;
 }
-
+uni-rich-text img {
+    max-width: 100% !important;
+}
 page {
     background-color: #f7f9f8;
     height: 100%;

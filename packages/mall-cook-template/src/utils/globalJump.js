@@ -27,7 +27,6 @@ export default function jump (target) {
 
   // 储存当前跳转信息
   uni.setStorageSync('jump', { name, data, type, id })
-
   switch (name) {
     case 'home':
       uni.switchTab({
@@ -67,22 +66,22 @@ export default function jump (target) {
       break
     case 'detail':
       uni.navigateTo({
-        url: `/pages/index/goods/detail?id=${data.id}`
+        url: `/pages/product/detail?id=${data.id}`
       })
       break
     case 'search':
       uni.navigateTo({
-        url: `/pages/index/goods/search`
+        url: `/pages/product/search`
       })
       break
     case 'list':
       uni.navigateTo({
-        url: `/pages/index/goods/list`
+        url: `/pages/product/list`
       })
       break
     case 'login':
       uni.navigateTo({
-        url: `/pages/index/user/login`
+        url: `/pages/public/login`
       })
       break
 

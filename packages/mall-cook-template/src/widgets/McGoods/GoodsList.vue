@@ -40,7 +40,7 @@
 
 <script>
 import GoodsItem from "./GoodsItem.vue";
-import { getGoodsListByIds } from "@/api";
+import { getList } from "@/api/good";
 import { mapGetters } from "vuex";
 
 export default {
@@ -77,22 +77,22 @@ export default {
       immediate: true,
       deep: true,
       handler(newValue, oldValue) {
-        this.getList();
+        this.loadData();
       },
     },
   },
 
   methods: {
-    async getList() {
+    async loadData() {
       this.loading = true;
-
-      let { list } = await getGoodsListByIds({
+      const that = this
+      await getList({
         projectId: this.project.id,
         ids: this.list,
-      });
-
-      this.mList = list;
-      this.loading = false;
+      },function(res){
+        that.mList = res.data;
+        that.loading = false;
+      })
     },
 
     getWrapStyle() {

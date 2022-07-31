@@ -125,19 +125,18 @@ export default {
       return new Promise((resolve, reject) => {
         let coverFile = this.getFile(base64);
         let formData = new FormData();
-        formData.append("domainId", 3);
-        formData.append("dir", "img");
+        formData.append("type", 1);
+        formData.append("size", 1024 * 1024 * 2);
+        formData.append("specification", 600);
         formData.append("file", coverFile);
         // 图片上传服务器
         uploadCover(formData)
           .then((res) => {
-            if ((res.errorCode = "00000")) {
-              console.log("图片上传服务器成功");
-              this.$emit("complete", {
-                status: 1,
-                data: res.data,
-              });
-            }
+            console.log("图片上传服务器成功");
+            this.$emit("complete", {
+              status: 1,
+              data: res,
+            });
           })
           .finally(() => (this.show = false));
       });

@@ -2,8 +2,8 @@
  * @Description: 自定义渲染页面
  * @Autor: WangYuan
  * @Date: 2022-01-19 16:12:04
- * @LastEditors: WangYuan
- * @LastEditTime: 2022-04-13 17:31:33
+ * @LastEditors: purl
+ * @LastEditTime: 2022-07-23 16:31:33
 -->
 <template>
   <global-tab-page>
@@ -32,7 +32,7 @@ import CustomTopBar from "@/components/custom-top-bar.vue";
 import RenderWidget from "@/components/render-widget";
 import FullLoading from "@/components/full-loading.vue";
 import { mapMutations, mapGetters } from "vuex";
-import { getProjectDetail } from "@/api/index";
+import { detail } from "@/api/project";
 
 let projectId;
 
@@ -66,7 +66,7 @@ export default {
     let id = this.formatQuery(decodeURIComponent(query.scene)).id || query.id;
 
     // 上一次渲染保存的项目id
-    let lastProjectId = uni.getStorageSync("projectId");
+    let lastProjectId = uni.getStorageSync("dsshopProjectId");
 
     projectId = id || lastProjectId || this.auditProjectId;
 
@@ -76,7 +76,7 @@ export default {
     if (projectId == this.auditProjectId) {
       this.enterAuth();
     } else {
-      uni.setStorageSync("projectId", projectId);
+      uni.setStorageSync("dsshopProjectId", projectId);
     }
 
     this.initMP();
@@ -85,7 +85,7 @@ export default {
 
   onShow() {
     // 每次进入页面，返回顶部
-    wx.pageScrollTo({
+    uni.pageScrollTo({
       scrollTop: 0,
     });
   },
@@ -93,7 +93,7 @@ export default {
   data() {
     return {
       loading: true,
-      auditProjectId: "62009795c163ee452d3b35b1", // 默认模板项目id,用于小程序审核
+      auditProjectId: "1", // 默认模板项目id,用于小程序审核
     };
   },
 
@@ -127,7 +127,11 @@ export default {
 
     // 获取商城数据，初始化商城
     async initProject() {
-      if (!projectId) {
+      const id = projectId ? projectId :uni.getStorageSync("dsshopProjectId")
+      if(!uni.getStorageSync("dsshopProjectId")){
+        uni.setStorageSync("dsshopProjectId", projectId)
+      }
+      if (!id) {
         uni.showModal({
           title: "商城加载失败",
           content: "请传入参数id",
@@ -136,14 +140,14 @@ export default {
         this.loading = false;
         return;
       }
+      const that = this
+      await detail(projectId,'',function(res){
+        that.formatProjectData(res);
 
-      let { data } = await getProjectDetail({ id: projectId });
+        that.setProject(res);
 
-      this.formatProjectData(data);
-
-      this.setProject(data);
-
-      this.loadingComplete();
+        that.loadingComplete();
+      })
     },
 
     // 处理项目数据格式（老数据结构，不满足小程序版本）

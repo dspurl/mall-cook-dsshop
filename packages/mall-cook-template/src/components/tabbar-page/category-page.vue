@@ -2,213 +2,257 @@
  * @Description: 商品分类页面
  * @Autor: WangYuan
  * @Date: 2021-09-06 15:50:44
- * @LastEditors: WangYuan
- * @LastEditTime: 2022-03-22 14:46:38
+ * @LastEditors: purl
+ * @LastEditTime: 2022-07-30 09:22:15
 -->
 <template>
-  <view class="wrap">
-    <!-- 左边分组列表 -->
-    <view class="wrap-left">
-      <ul class="group">
-        <li
-          v-for="(group, index) in groups"
-          :key="index"
-          class="group-item"
-          :class="[getItemClass(index)]"
-          @click="chooseGroup(index)"
-        >
-          <span>{{ group.name }}</span>
-        </li>
-      </ul>
-    </view>
-
-    <!-- 右边容器 -->
-    <view class="wrap-right">
-      <view class="list">
-        <template v-if="activeGroup">
-          <!-- 分类列表 -->
-          <template v-if="activeGroup.child.length">
-            <view class="pl5 pr5">
-              <img v-if="isAdvertising" class="w-100 mt5" :src="item.iamge" />
-              <view class="mt15 f14">{{ activeGroup.name }}</view>
-            </view>
-            <view
-              v-for="(type, index) in activeGroup.child"
-              :key="index"
-              class="list-item"
-              @click="toList(type)"
-            >
-              <image class="w70 h70 mb10" radius="5" :src="type.image" />
-              <view class="f13">{{ type.name }}</view>
-            </view>
-          </template>
-
-          <!-- 空列表 -->
-          <u-empty
-            v-else
-            src="http://110.42.184.128:8090/img/1638500391170.jpg"
-            text="此分类暂无商品"
-            mode="list"
-          ></u-empty>
-        </template>
+  <view class="content" :style="{height: windowHeight+'px'}">
+    <scroll-view scroll-y class="left-aside">
+      <view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{active: item.id === currentId}" @click="tabtap(item)">
+        {{item.name}}
       </view>
-    </view>
+    </scroll-view>
+    <scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
+      <template v-if="slist.length > 0">
+        <view v-for="item in slist" :key="item.id" class="s-list indexBar-box" :class="'main-'+item.id" :id="'main-'+item.id">
+          <text class="s-item">{{item.name}}</text>
+          <view class="t-list">
+            <view @click="navToList(item.id, titem.id)" v-if="titem.pid === item.id" class="t-item text-cut" v-for="titem in tlist" :key="titem.id">
+              <image :src="titem.resources.img  | smallImage(80)" lazy-load></image>
+              <text class="text-cut text-center">{{titem.name}}</text>
+            </view>
+          </view>
+        </view>
+      </template>
+      <template v-else>
+        <view v-for="item in flist" :key="item.id" class="s-list" :ref="'main-'+item.id" :id="'main-'+item.id">
+          <text class="s-item"></text>
+          <view class="t-list">
+            <view @click="navToList(0, titem.id)" v-if="titem.pid === item.id" class="t-item text-cut" v-for="titem in tlist" :key="titem.id">
+              <image mode="aspectFit" :src="titem.resources.img  | smallImage(80)" lazy-load></image>
+              <text class="text-cut text-center">{{titem.name}}</text>
+            </view>
+          </view>
+        </view>
+      </template>
+    </scroll-view>
   </view>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
+import { goodCategory } from "@/api/good";
 export default {
-  name: "GoodsCategory",
-
-  // props: {
-  //   groups: {
-  //     type: Array,
-  //     default: () => [],
-  //   },
-  // },
-
-  created() {
-    console.log("...");
-    console.log(this.groups);
-
-    this.getData();
-  },
-
   data() {
     return {
-      active: "0",
-      activeGroup: null,
-    };
+      sizeCalcState: false,
+      tabScrollTop: -1,
+      currentId: 49,	//一级类目默认选中的ID
+      flist: [],
+      slist: [],
+      tlist: [],
+      tap: 0,
+	  windowHeight: ''
+    }
   },
-
-  computed: {
-    ...mapGetters(["project"]),
-
-    isAdvertising() {
-      return this.project?.categoryTpl?.advertising;
-    },
-
-    groups() {
-      return this.project.config.goodsGroups;
-    },
+  created(){
+	// 获取可使用窗口高度
+	const res = uni.getSystemInfoSync();
+	this.windowHeight = res.windowHeight
+	// #ifdef MP
+	this.windowHeight = this.windowHeight -50
+	// #endif
+    this.loadData();
   },
-
   methods: {
-    // 获取商品类型数据
-    getData() {
-      this.activeGroup = this.groups[0];
+    async loadData(){
+      const that = this
+      // 分类
+      await goodCategory({},function(res){
+        res.forEach(item=>{
+          if(!item.pid){
+            that.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
+          }else if(!item.resources){
+            that.slist.push(item); //没有图的是2级分类
+          }else{
+            that.tlist.push(item); //3级分类
+          }
+        })
+        setTimeout(() => {
+          if(!that.sizeCalcState){
+            that.calcSize();
+          }
+        }, 1)
+      })
     },
-
-    // 选择分组
-    chooseGroup(index) {
-      this.active = index;
-      this.activeGroup = this.groups[index];
+    //一级分类点击
+    tabtap(item){
+      if(!this.sizeCalcState){
+        this.calcSize();
+      }
+      this.tap = 1
+      this.currentId = item.id;
+      if (this.slist.length>0) {
+        let index = this.slist.findIndex(sitem=>sitem.pid === item.id);
+        if(this.tabScrollTop === this.slist[index].top){
+          this.tabScrollTop = this.slist[index].top+1
+        }else{
+          this.tabScrollTop = this.slist[index].top
+        }
+      } else {
+        let index = this.flist.findIndex(sitem=>sitem.id === item.id);
+        if(this.tabScrollTop === this.flist[index].top){
+          this.tabScrollTop = this.flist[index].top+1
+        }else{
+          this.tabScrollTop = this.flist[index].top
+        }
+      }
     },
+    //右侧栏滚动
+    asideScroll(e){
+      if(!this.sizeCalcState){
+        this.calcSize();
+      }
+      let scrollTop = e.detail.scrollTop;
+      let tabs = null
+      if (this.slist.length>0) {
+        tabs = this.slist.filter(item=>item.top <= scrollTop).reverse();
+        if(tabs.length > 0 && !this.tap){
+          this.currentId = tabs[0].pid;
+        }
+      } else {
+        tabs = this.flist.filter(item=>item.top <= scrollTop).reverse();
+        if(tabs.length > 0 && !this.tap){
+          this.currentId = tabs[0].id;
+        }
+      }
 
-    // 菜单tab高亮样式
-    getItemClass(index) {
-      if (this.active == index) return "group-item-active";
+      this.tap = 0
     },
-
-    // 跳转商品列表
-    toList(type) {
-      if (!type) return;
+    //计算右侧栏每个tab的高度等信息
+    calcSize(){
+      let h = 0;
+      if (this.slist.length>0) {
+        this.slist.forEach(item=>{
+          let view = uni.createSelectorQuery().in(this).select("#main-" + item.id);
+          view.fields({
+            size: true
+          }, data => {
+            item.top = h;
+            h += data.height;
+            item.bottom = h;
+          }).exec();
+        })
+      } else {
+        this.flist.forEach(item=>{
+          let view = uni.createSelectorQuery().in(this).select("#main-" + item.id);
+		  
+          view.fields({
+            size: true
+          }, data => {
+            if(h === 0){
+              this.currentId = item.id
+            }
+            item.top = h;
+            h += data.height;
+            item.bottom = h;
+          }).exec();
+        })
+      }
+      this.sizeCalcState = true;
+    },
+    navToList(sid, tid){
       uni.navigateTo({
-        url: `/pages/index/goods/list?type=${type}`,
-      });
-    },
-  },
-};
+        url: `/pages/product/list?fid=${this.currentId}&sid=${sid}&tid=${tid}`
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-.wrap {
-  // #ifdef H5
-  height: calc(100vh - 94px);
-  // #endif
+page,
+.content {
+  height: 100%;
+  background-color: #f8f8f8;
+}
 
-  // #ifdef MP
-  height: calc(100vh - 50px);
-  // #endif
-  background: #fff;
-
-  .wrap-left {
-    display: inline-block;
-    position: relative;
-    width: 100px;
-    height: 100%; //高度根据需求自行设定
-    background: #fafafa;
-
-    .group {
+.content {
+  display: flex;
+}
+.left-aside {
+  flex-shrink: 0;
+  width: 200upx;
+  background-color: #fff;
+}
+.f-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100upx;
+  font-size: 28upx;
+  color: $font-color-base;
+  position: relative;
+  &.active{
+    color: $base-color;
+    background: #f8f8f8;
+    &:before{
+      content: '';
       position: absolute;
       left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0; //left,top,right,bottom都为0，充满真个页面
-      overflow-y: auto;
-      overflow-x: hidden; //设置Y轴出现滚动条，X轴隐藏
-
-      // 隐藏滚动条
-      &::-webkit-scrollbar {
-        display: none; /* Chrome Safari */
-      }
-
-      .group-item {
-        padding: 15px 0;
-        font-size: 14px;
-        text-align: center;
-      }
-
-      .group-item-active {
-        position: relative;
-        color: #c7655a;
-        background: #fff;
-
-        &::after {
-          content: "";
-          position: absolute;
-          top: 10px;
-          left: 0;
-          width: 3px;
-          height: 24px;
-          background: #c7655a;
-        }
-      }
+      top: 50%;
+      transform: translateY(-50%);
+      height: 36upx;
+      width: 8upx;
+      background-color: $base-color;
+      border-radius: 0 4px 4px 0;
+      opacity: .8;
     }
   }
+}
 
-  .wrap-right {
-    display: inline-block;
-    position: relative;
-    width: calc(100% - 100px);
-    height: 100%; //高度根据需求自行设定
+.right-aside{
+  flex: 1;
+  overflow-y: auto;
+  padding-left: 20upx;
+}
+.s-item{
+  display: flex;
+  align-items: center;
+  height: 70upx;
+  padding-top: 8upx;
+  font-size: 28upx;
+  color: $font-color-dark;
+}
+.t-list{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  background: #fff;
+  padding-top: 12upx;
+  &:after{
+    content: '';
+    flex: 99;
+    height: 0;
+  }
+}
+.t-item{
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 176upx;
+  font-size: 26upx;
+  color: #666;
+  padding-bottom: 20upx;
 
-    .list {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0; //left,top,right,bottom都为0，充满真个页面
-      padding: 6px;
-      overflow-y: auto;
-      overflow-x: hidden; //设置Y轴出现滚动条，X轴隐藏
-
-      // 隐藏滚动条
-      &::-webkit-scrollbar {
-        display: none; /* Chrome Safari */
-      }
-
-      .list-item {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        width: 33.3%;
-        margin-top: 15px;
-        color: #828282;
-      }
-    }
+  image{
+    width: 140upx;
+    height: 140upx;
+  }
+  .text-cut{
+    width: 176upx;
   }
 }
 </style>

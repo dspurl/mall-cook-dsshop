@@ -7,7 +7,7 @@
  */
 // const baseUrl = 'http://110.42.184.128:3000'
 // const baseUrl = 'https://www.lanshan-h5.cn'
-const baseUrl = 'http://127.0.0.1:3000'
+const baseUrl = 'http://dsshop.test/api/v1/app'
 const request = (url, data, method = 'POST') => {
   console.log('执行');
   return new Promise((resolve, reject) => {

@@ -45,8 +45,11 @@ export default {
 .full {
   position: fixed;
   top: 0;
-  width: 750rpx;
+  width: 100%;
   height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 100000;
 }
 
@@ -112,8 +115,8 @@ h1 {
 
 .loader {
   position: absolute;
-  top: 40%;
-  left: 40%;
+  left: 45%;
+  top: 50%;
   width: 60px;
   height: 60px;
   display: block;

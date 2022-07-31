@@ -10,7 +10,7 @@
     <div class="flex" :style="[getStyle('item')]">
       <!-- 商品图片 -->
       <image
-        :src="item.cover"
+        :src="item.resources.img | smallImage(250)"
         :style="[getStyle('image')]"
         mode="widthFix"
         radius="6"
@@ -23,7 +23,7 @@
             {{ item.name }}
           </div>
           <div v-show="attr.showInfo" class="mt8 f12 f-grey">
-            {{ item.describe }}
+            {{ item.short_description }}
           </div>
         </div>
 
@@ -37,14 +37,14 @@
             <span class="f-red">
               <span class="mr2 f12">¥</span>
               <span class="f18" :style="[getStyle('price')]">{{
-                item.price | money
+                item.price_show[0] | 1000
               }}</span>
             </span>
             <!-- 原价 -->
             <span v-show="attr.showOriginalPrice" class="text-through f-grey">
               <span class="ml4 f12">¥</span>
               <span class="f14" :style="[getStyle('originalPrice')]">{{
-                item.originalPrice | money
+                item.original_price_show[0] | 1000
               }}</span>
             </span>
           </div>

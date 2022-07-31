@@ -66,12 +66,12 @@ export default {
       let self = this;
       window.addEventListener("message", function (e) {
         if (e.source != window.parent) return;
-
         if (e.data) {
           let { even, params } = e.data;
 
-          if (even == "init") self.init(params);
-
+          if (even == "init"){
+            self.init(params);
+          }
           if (even == "move") self.moveWaiting(self, params);
 
           if (even == "drop") self.addWidget(self, params);
@@ -206,8 +206,7 @@ export default {
     // 创建封面base64,并通知父容器
     async createCover() {
       let node = document.getElementById("content");
-      let base64 = await domtoimage.toPng(node);
-
+      let base64 = await domtoimage.toPng(node, { "cacheBust":true });
       window.parent.postMessage(
         { type: "getCoverBase64", params: { base64 } },
         "*"

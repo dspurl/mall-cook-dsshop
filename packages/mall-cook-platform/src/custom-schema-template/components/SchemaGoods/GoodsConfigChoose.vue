@@ -30,37 +30,41 @@
       <el-table-column
         prop="name"
         label="商品名"
-        align='center'
-        header-align='center'
+        align='left'
+        header-align='left'
+        width="300"
       >
       </el-table-column>
       <el-table-column
-        label="商品封面"
-        align='center'
-        header-align='center'
+          label="商品封面"
+          align='center'
+          header-align='center'
+          width="80"
       >
         <template slot-scope="scope">
           <img
-            class="w50 h50"
-            :src="scope.row.cover"
+              class="w50 h50"
+              :src="scope.row.resources.img | smallImage(150)" :preview-src-list="[ scope.row.resources.img ]"
           >
+        </template>
+      </el-table-column>
+      <el-table-column label="商品类型" sortable="custom" prop="type" width="120">
+        <template slot-scope="scope">
+          {{ scope.row.type }}
         </template>
       </el-table-column>
       <el-table-column
         prop="price"
         label="价格（元）"
-        align='center'
-        header-align='center'
+        width="200"
       >
-      </el-table-column>
-      <el-table-column
-        prop="originalPrice"
-        label="原价（元）"
-        align='center'
-        header-align='center'
-      >
+        <template slot-scope="scope">
+          <div v-if="scope.row.price_show.length > 1">¥ {{ scope.row.price_show[0] }} - {{ scope.row.price_show[1] }}</div>
+          <div v-else>¥ {{ scope.row.price_show[0] }}</div>
+        </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" class="pagination" @pagination="getList"/>
     <span
       slot="footer"
       class="dialog-footer"
@@ -77,9 +81,11 @@
 <script>
 import { mapGetters } from "vuex";
 import { getGoodsList } from "@/api/goods";
+import Pagination from '@/components/Pagination'
 
 export default {
   name: "GoodsConfigChoose",
+  components: { Pagination },
   props: {
     show: {
       type: Boolean,
@@ -100,6 +106,14 @@ export default {
       visible: false,
       selectList: [],
       list: [],
+      total: 0,
+      listQuery: {
+        limit: 10,
+        page: this.$route.query.page ? Number(this.$route.query.page) : 1,
+        sort: '-id',
+        activeIndex: this.$route.query.activeIndex ? this.$route.query.activeIndex : '1',
+        cateId: this.$route.query.cateId
+      },
     };
   },
 
@@ -125,12 +139,12 @@ export default {
   methods: {
     // 获取商城商品列表
     async getList() {
-      let { status, list } = await getGoodsList({ projectId: this.project.id });
+      let { result, message } = await getGoodsList(this.listQuery);
 
-      if (status == "10000") {
+      if (result === "ok") {
         // 筛选字段
-        this.list = list;
-
+        this.list = message.data;
+        this.total = message.total
         // 根据选中列表id，筛选匹配对应数组，用于勾选回显
         this.selectList = this.list.filter((item) => {
           return this.value.includes(item.id);

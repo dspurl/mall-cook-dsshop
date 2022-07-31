@@ -48,3 +48,10 @@ export function settingProject(project) {
 export function removeProject() {
     return localStorage.removeItem(ProjectKey)
 }
+
+export function smallImage (img,size) {
+    var index=img.lastIndexOf('.');
+    if(!size)
+        size=300;
+    return img.substring(0,index) + '_'+ size +'.' + img.substring(index+1,img.length);
+}

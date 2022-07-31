@@ -114,8 +114,8 @@ export default {
 
   methods: {
     async getList() {
-      let { status, list } = await getGoodsList({ projectId: this.project.id });
-      if (status == "10000") this.list = list;
+      let { result, message } = await getGoodsList({ projectId: this.project.id });
+      if (result === "ok") this.list = message.data;
     },
 
     add() {

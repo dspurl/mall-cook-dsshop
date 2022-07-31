@@ -13,8 +13,19 @@
 import tabbarPage from "@/components/tabbar-page";
 
 export default {
+  data(){
+	return {
+		flag: false
+	}
+  },
   components: {
     tabbarPage,
+  },
+  onShow() {
+  	  this.flag = true
+  },
+  onHide(){
+  	  this.flag = false
   },
 };
 </script>

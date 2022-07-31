@@ -124,9 +124,8 @@ export default {
 
     // 保存
     async save() {
-      let { status } = await editProject(this.project);
-
-      if (status == "10000") {
+      let { result } = await editProject(this.project);
+      if (result === 'ok') {
         this.show = false;
         this.$notify({
           title: "成功",

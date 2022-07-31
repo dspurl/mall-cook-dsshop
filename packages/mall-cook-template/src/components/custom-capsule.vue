@@ -24,19 +24,19 @@
         <view class="subMenu">
           <view class="item" @click="$jump({ name: 'search' })">
             <u-icon name="search"></u-icon>
-            <text>搜索商品</text>
+            <text class="name">搜索商品</text>
           </view>
           <view class="item" @click="toFuture()">
             <u-icon name="order"></u-icon>
-            <text>我的订单</text>
+            <text class="name">我的订单</text>
           </view>
           <view class="item" @click="toFuture()">
             <u-icon name="heart"></u-icon>
-            <text>我的收藏</text>
+            <text class="name">我的收藏</text>
           </view>
           <view class="item" @click="toFuture()">
             <u-icon name="clock"></u-icon>
-            <text>我的足迹</text>
+            <text class="name">我的足迹</text>
           </view>
         </view>
         <view class="mask" @click="subMenu = false"></view>
@@ -74,7 +74,7 @@ export default {
   .slot-wrap {
     position: relative;
     margin-left: 10px;
-    width: 88px;
+    width: 176rpx;
     height: 30px;
     border-radius: 15px;
     color: #fff;
@@ -99,7 +99,7 @@ export default {
 
   .subMenu {
     position: absolute;
-    top: 54px;
+    top: 100rpx;
     left: 10px;
     width: 88px;
     background-color: #fff;
@@ -109,6 +109,7 @@ export default {
     .item {
       display: flex;
       align-items: center;
+      justify-content: center;
       height: 40px;
       border-bottom: 1px solid #f0f0f0;
       color: #555;
@@ -116,8 +117,8 @@ export default {
       &:active {
         background-color: #f2f3f4;
       }
-      u-icon {
-        margin: 0 8px;
+      .name{
+        margin-left: 10rpx;
       }
     }
     .item:last-child {

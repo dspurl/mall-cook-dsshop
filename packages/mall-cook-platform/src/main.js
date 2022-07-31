@@ -70,17 +70,18 @@ for (let k in axiosShortcut) {
  */
 import 'imgpond/dist/style.css'
 import Imgpond from 'imgpond'
-
 Vue.use(Imgpond, {
   upload: (file, context) => new Promise((resolve, reject) => {
-    Vue.prototype.$POST.upload(global.baseApi + 'upload', ({
+    Vue.prototype.$POST.upload(global.baseApi + 'uploadPictures', ({
       file,
+      type: 1,
+      size: 1024 * 1024 * 5,
       ...context.$attrs.requestParam,
     }), {
       baseURL: '',
       timeout: 20000,
     }).then(res => {
-      resolve(res.data)
+      resolve(res)
     }).catch(e => {
       reject(e)
     })

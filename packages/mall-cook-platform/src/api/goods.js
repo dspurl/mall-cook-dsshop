@@ -10,7 +10,7 @@ import request from '@/utils/request'
 /**
  * 查询商品列表
  */
-export const getGoodsList = async (data) => request({ url: "goods/getByList", method: "POST", data })
+export const getGoodsList = async (data) => request({ url: "good", method: "GET", params: data })
 
 /**
  * 根据id查询商品详情
@@ -20,7 +20,7 @@ export const getGoodsById = async (data) => request({ url: "goods/getById", meth
 /**
  * 根据id列表查询商品列表
  */
- export const getGoodsByIds = async (data) => request({ url: "goods/getByIds", method: "POST", data })
+ export const getGoodsByIds = async (data) => request({ url: "good", method: "GET", params: data })
 
 /**
  * 新增商品

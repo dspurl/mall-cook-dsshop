@@ -121,16 +121,16 @@ export default {
 
     // 编辑页面
     editPage(id) {
-      
+
       console.log("编辑页面");
       console.log(this.project.pages);
       // console.log(JSON.stringify(data));
       console.log(id);
-      
+
 
       let page = this.project.pages.find((page) => (page.id == id));
       console.log(page);
-      
+
 
       this.setCurPage(page);
       this.$router.push({ name: "page-build" });

@@ -16,6 +16,17 @@ const filters = {
     // 价格显示 分 -> 元
     money(target) {
         return target / 100
+    },
+    //字符串转货币, 保留二位小数
+    1000(val) {
+        return (parseFloat(val)).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+    },
+    //显示小图片
+    smallImage(img,size) {
+        const index=img.lastIndexOf('.');
+        if(!size)
+            size=300;
+        return img.substring(0,index) + '_'+ size +'.' + img.substring(index+1,img.length);
     }
 }
 

@@ -76,8 +76,8 @@ export default {
     },
 
     async getWXQr() {
-      let { data } = await createWXcode({ id: this.project.id });
-      this.WXCode = data;
+      let { message } = await createWXcode({ id: this.project.id });
+      this.WXCode = message;
     },
 
     link() {
