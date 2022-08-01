@@ -88,6 +88,10 @@
                     "key" : ""
                 }
             }
-        }
+        },
+        "router" : {
+            "base" : "/template/"
+        },
+        "title" : "dsshop商城"
     }
 }

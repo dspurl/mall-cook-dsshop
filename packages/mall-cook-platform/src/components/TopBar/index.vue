@@ -13,7 +13,6 @@
       <span class="f14"></span>
       <!-- 右侧内容 -->
       <div>
-        <git-control />
         <el-button size="small" @click="toSchema">schema 生成器</el-button>
 
         <el-button size="small ml10" @click="viewQr">商城二维码</el-button>

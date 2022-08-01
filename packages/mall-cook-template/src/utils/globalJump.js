@@ -23,6 +23,9 @@ export default function jump (target) {
       let target = findTab(id)
       name = target ? target.jump.type : type
       break
+	case 'link': // 站内连接
+	  name = 'link'
+	  break
   }
 
   // 储存当前跳转信息
@@ -90,6 +93,11 @@ export default function jump (target) {
         url: `/pages/index/custom/custom?pageId=${id}`
       })
       break
+	case 'link':
+	  uni.navigateTo({
+	    url: id
+	  })
+	  break
   }
 }
 
