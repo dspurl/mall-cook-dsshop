@@ -11,6 +11,7 @@
     :visible.sync="visible"
     :close-on-click-modal='false'
     :append-to-body='true'
+    style="width: 750px;"
   >
     <el-table
       ref="multipleTable"
