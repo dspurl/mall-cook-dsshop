@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2022-02-11 10:08:57
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-04-08 11:00:02
+ * @LastEditTime: 2022-11-02 09:10:53
  */
 export default {
   // baseApi: 'https://www.lanshan-h5.cn:1443/node/',  // 后端接口地址
