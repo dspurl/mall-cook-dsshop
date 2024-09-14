@@ -3,7 +3,7 @@
  * @Autor: WangYuan
  * @Date: 2021-05-19 10:53:33
  * @LastEditors: WangYuan
- * @LastEditTime: 2022-02-14 15:03:58
+ * @LastEditTime: 2022-08-01 16:21:34
  */
 const path = require('path')
 const productionGzipExtensions = ['js', 'css']
@@ -24,7 +24,7 @@ module.exports = {
       chunks: ['chunk-vendors', 'chunk-common', 'index']
     }
   },
-
+  transpileDependencies: ['faim', 'mime', 'vue-global-config'],
   configureWebpack: config => {
     // CDN 加载依赖
     config.externals = {
@@ -78,5 +78,19 @@ module.exports = {
       .before('postcss-loader') // this makes it work.
       .options({ remUnit: 37.5, remPrecision: 8 })
       .end()
+  },
+
+  devServer: {
+    port: '8081', // 设置端口号
+    proxy: {
+        '/api': {
+          target: 'http://139.196.223.93', //API服务器的地址
+          ws: true, //代理websockets
+          changeOrigin: true, // 是否跨域，虚拟的站点需要更管origin
+          pathRewrite: {
+            '^/api': '',
+          }
+        }
+    },
   }
 }
